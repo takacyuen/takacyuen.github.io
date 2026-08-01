@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お問い合わせ | 高忠園</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Playfair+Display:ital,wght@1,500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* -----------------------------------------
+           ベース・共通スタイル（統一感を保持）
+        ----------------------------------------- */
+        :root {
+            --primary-color: #556b2f;
+            /* オリーブ */
+            --accent-color: #d1b464;
+            /* ゴールド */
+            --text-color: #2c2c2c;
+            --bg-color: #fdfdfa;
+            /* 生成り */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Serif JP', serif;
+            line-height: 2.0;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            /* フォームが見やすいように少し狭めに設定 */
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        /* -----------------------------------------
+           ヘッダー（下層ページ用：最初から背景あり）
+        ----------------------------------------- */
+        header {
+            background-color: var(--primary-color);
+            width: 100%;
+            padding: 20px 0;
+        }
+
+        .header-wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 0.1em;
+        }
+
+        .logo a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-list li a {
+            text-decoration: none;
+            color: #ffffff;
+            margin-left: 30px;
+            font-weight: 400;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-list li a:hover {
+            color: var(--accent-color);
+        }
+
+        /* -----------------------------------------
+           ページタイトル
+        ----------------------------------------- */
+        .page-header {
+            text-align: center;
+            padding: 80px 0 40px;
+        }
+
+        .page-title {
+            color: var(--primary-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .page-title .en {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 5px;
+        }
+
+        .page-title .jp {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+        }
+
+        .page-desc {
+            font-size: 0.95rem;
+            color: #666;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        /* -----------------------------------------
+           お問い合わせフォーム
+        ----------------------------------------- */
+        .contact-form {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+            margin-bottom: 100px;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            letter-spacing: 0.05em;
+        }
+
+        .form-label .required {
+            background-color: #e07d7d;
+            color: #fff;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        /* 入力欄の共通スタイル */
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e0e0d0;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--text-color);
+            background-color: #fafaf7;
+            transition: all 0.3s ease;
+        }
+
+        /* 入力欄をクリックしたとき（フォーカス時） */
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background-color: #ffffff;
+            box-shadow: 0 0 8px rgba(209, 180, 100, 0.2);
+        }
+
+        /* セレクトボックスの調整 */
+        select.form-control {
+            cursor: pointer;
+        }
+
+        /* 送信ボタンのエリア */
+        .form-submit {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .submit-btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border: 1px solid var(--primary-color);
+            padding: 15px 60px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(85, 107, 47, 0.2);
+        }
+
+        .submit-btn:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(209, 180, 100, 0.3);
+        }
+
+        /* -----------------------------------------
+           フッター
+        ----------------------------------------- */
+        footer {
+            background-color: var(--primary-color);
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            padding: 40px 0;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+        }
+
+        /* -----------------------------------------
+           スマホ対応
+        ----------------------------------------- */
+        @media (max-width: 768px) {
+            .header-wrap {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-list li a {
+                margin: 0 10px;
+                font-size: 0.8rem;
+            }
+
+            .contact-form {
+                padding: 25px 20px;
+            }
+
+            .submit-btn {
+                width: 100%;
+                padding: 15px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container header-wrap">
+            <div class="logo"><a href="index.html"> 高忠園</a></div>
+            <nav>
+                <ul class="nav-list">
+                    <li><a href="index.html#news">Information</a></li>
+                    <li><a href="index.html#products">Varieties</a></li>
+                    <li><a href="index.html#access">Visit</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <div class="page-title">
+                <span class="en">Contact</span>
+                <span class="jp">お問い合わせ</span>
+            </div>
+            <p class="page-desc">
+                当園に関するご質問、大口注文のご相談などは、以下のフォームよりお気軽にお問い合わせください。<br>
+                ※直売所の在庫確認などお急ぎの場合は、営業時間内にお電話にてご連絡いただけますと確実です。
+            </p>
+        </div>
+
+        <div class="contact-form">
+            <iframe
+                src="https://docs.google.com/forms/d/e/1FAIpQLSd0hPbdIEKAXUWYIkb2OeITITahIrHQkG8sxIgrelwMgMWWWw/viewform?embedded=true"
+                width="640" height="1028" frameborder="0" marginheight="0" marginwidth="0">読み込んでいます…</iframe>
+        </div>
