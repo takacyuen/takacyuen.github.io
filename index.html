@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高忠園 | 松戸の梨と野菜</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Playfair+Display:ital,wght@1,500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* -----------------------------------------
+           ベース・共通スタイル
+        ----------------------------------------- */
+        :root {
+            --primary-color: #556b2f;
+            /* より深い、落ち着いたグリーン（オリーブ） */
+            --accent-color: #d1b464;
+            /* 上品なゴールド・ベージュ */
+            --text-color: #2c2c2c;
+            --bg-color: #fdfdfa;
+            /* 非常にクリーンで温かみのある生成り */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            /* 日本語は明朝体ベースで上品に */
+            font-family: 'Noto Serif JP', serif;
+            line-height: 2.0;
+            /* 余白を広めに */
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            overflow-x: hidden;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            vertical-align: middle;
+        }
+
+        .container {
+            max-width: 1100px;
+            /* 少し広めに */
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        section {
+            padding: 100px 0;
+            /* セクション間を広く */
+        }
+
+        .section-title {
+            text-align: center;
+            position: relative;
+            margin-bottom: 60px;
+            color: var(--primary-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .section-title .en {
+            /* 英語のサブタイトルをPlayfair Displayで */
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            margin-bottom: 5px;
+        }
+
+        .section-title .jp {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+        }
+
+        /* -----------------------------------------
+           ヘッダー
+        ----------------------------------------- */
+        header {
+            background-color: transparent;
+            position: absolute;
+            /* メインビジュアルの上に重ねる */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 20px 0;
+        }
+
+        .header-wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 0.1em;
+            /* 💡 影を追加：文字の周りにうっすら黒いぼかしを入れます */
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-list li a {
+            text-decoration: none;
+            color: #ffffff;
+            margin-left: 30px;
+            font-weight: 400;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+            letter-spacing: 0.05em;
+            /* 💡 影を追加：文字の周りにうっすら黒いぼかしを入れます */
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        .nav-list li a:hover {
+            color: var(--accent-color);
+        }
+
+        /* -----------------------------------------
+           メインビジュアル (Hero)
+        ----------------------------------------- */
+        .hero {
+            position: relative;
+            background-color: #000;
+            /* 写真が読み込まれる前の土台 */
+            height: 100vh;
+            /* 画面いっぱいに */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: -50px;
+            /* 次のセクションへのつなぎ */
+            overflow: hidden;
+            /* スライドがはみ出さないように */
+        }
+
+        /* 💡 追加：スライド画像1枚ずつの設定 */
+        .slide-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            /* 枠いっぱいに画像を広げる */
+            background-position: center;
+            /* 画像の中心を基準にする */
+            background-repeat: no-repeat;
+            opacity: 0;
+            /* 最初はすべての画像を透明にする */
+            transition: opacity 1.5s ease-in-out;
+            /* 1.5秒かけてふわっと切り替える */
+            z-index: 1;
+        }
+
+        /* 💡 追加：文字を読みやすくするために画像の上にうっすら黒いフィルターをかける */
+        .slide-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            /* 30%の透明な黒 */
+        }
+
+        /* 💡 追加：is-activeがついた画像だけを表に浮き上がらせる */
+        .slide-bg.is-active {
+            opacity: 1;
+            z-index: 2;
+        }
+
+        .hero-fallback {
+            background-color: #d8dec4;
+        }
+
+        /* 💡 変更：キャッチコピーが写真の下に隠れないように前面へ配置 */
+        .hero-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            letter-spacing: 0.15em;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        /* -----------------------------------------
+           Instagramセクション
+        ----------------------------------------- */
+        .instagram-embed-container {
+            max-width: 960px;
+            margin: 0 auto;
+            background-color: transparent;
+            /* 背景になじませる */
+        }
+
+        /* インスタ風のボタンをより洗練されたデザインに */
+        .insta-btn {
+            display: inline-block;
+            border: 1px solid var(--accent-color);
+            /* 枠線だけ */
+            color: var(--primary-color);
+            text-decoration: none;
+            padding: 12px 50px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease;
+        }
+
+        .insta-btn:hover {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            transform: scale(1.05);
+        }
+
+        /* ダミー用のスタイル */
+        .insta-dummy-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .insta-dummy-post {
+            background-color: #ffffff;
+            border: 1px solid #eaeaea;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            font-size: 0.8rem;
+            border-radius: 4px;
+        }
+
+        /* -----------------------------------------
+           品種紹介（Products）
+        ----------------------------------------- */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 50px;
+            /* 余白を広く */
+        }
+
+        .product-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            text-align: center;
+            padding-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .product-img {
+            height: 250px;
+            background-color: #eaeaea;
+            /* 画像がない時のダミー */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .product-card h3 {
+            margin: 25px 0 10px;
+            color: var(--primary-color);
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+        }
+
+        .product-season {
+            display: inline-block;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            /* 英語部分 */
+        }
+
+        .product-desc {
+            padding: 0 25px;
+            font-size: 0.95rem;
+            text-align: left;
+            line-height: 2.2;
+            color: #555;
+        }
+
+        /* -----------------------------------------
+           店舗情報（Access）
+        ----------------------------------------- */
+        .info-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        .info-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .info-table th,
+        .info-table td {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0d0;
+            text-align: left;
+        }
+
+        .info-table th {
+            width: 35%;
+            color: var(--primary-color);
+            font-weight: 700;
+            white-space: nowrap;
+            letter-spacing: 0.05em;
+        }
+
+        .info-table td {
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .info-map {
+            width: 100%;
+            height: 450px;
+            background-color: #eaeaea;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+        }
+
+        /* -----------------------------------------
+           フッター
+        ----------------------------------------- */
+        footer {
+            background-color: var(--primary-color);
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            padding: 40px 0;
+            font-size: 0.8rem;
+            font-family: 'Noto Sans JP', sans-serif;
+            /* フッターは読みやすく */
+            letter-spacing: 0.1em;
+        }
+
+        /* -----------------------------------------
+           レスポンシブ（スマホ対応）
+        ----------------------------------------- */
+        @media (max-width: 768px) {
+            section {
+                padding: 60px 0;
+            }
+
+            .header-wrap {
+                flex-direction: column;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .nav-list li a {
+                margin: 0 10px;
+                font-size: 0.8rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+                letter-spacing: 0.15em;
+            }
+
+            .hero-content p {
+                font-size: 0.95rem;
+            }
+
+            .info-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .info-map {
+                height: 300px;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container header-wrap">
+            <div class="logo">高忠園 / 直売所</div>
+            <nav>
+                <ul class="nav-list">
+                    <li><a href="#news">Information</a></li>
+                    <li><a href="#products">Varieties</a></li>
+                    <li><a href="#access">Visit</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="hero">
+        <div class="slide-bg is-active" style="background-image: url('images/slide1.jpg');"></div>
+        <div class="slide-bg" style="background-image: url('images/slide2.jpg');"></div>
+        <div class="slide-bg" style="background-image: url('images/slide3.jpg');"></div>
+        <div class="slide-bg" style="background-image: url('images/slide4.jpg');"></div>
+
+        <div class="hero-content">
+            <h1>松戸の梨と野菜</h1>
+            <p>洗練された甘みのみずみずしい梨と採れたて新鮮な野菜</p>
+        </div>
+    </div>
+
+    <section id="news">
+        <div class="container">
+            <div class="section-title">
+                <span class="en">Information</span>
+                <span class="jp">お知らせ</span>
+            </div>
+
+            <div class="instagram-embed-container">
+                <div class="insta-dummy-grid">
+                    <div class="insta-dummy-post">Instagram 1</div>
+                    <div class="insta-dummy-post">Instagram 2</div>
+                    <div class="insta-dummy-post">Instagram 3</div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 50px;">
+                <a href="https://instagram.com/あなたのユーザー名" target="_blank" rel="noopener" class="insta-btn">
+                    INSTAGRAM
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="products" style="background-color: #f7f6f2;">
+        <div class="container">
+            <div class="section-title">
+                <span class="en">Varieties</span>
+                <span class="jp">品種と時期</span>
+            </div>
+            <div class="product-grid">
+
+                <div class="product-card">
+                    <div class="product-img">[ 甘ひびきの写真 ]</div>
+                    <h3>甘ひびき</h3>
+                    <span class="product-season">時期: 7月下旬から８月上旬</span>
+                    <p class="product-desc">酸味がほとんどない濃厚な甘みとシャキシャキとした食感が特徴です。</p>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img">[ 幸水の写真 ]</div>
+                    <h3>幸水</h3>
+                    <span class="product-season">Season: ８月上旬から９月上旬</span>
+                    <p class="product-desc">梨のシーズンの幕開け。強い甘みと、驚くほどジューシーでみずみずしい果肉が特徴です。</p>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img">[ 豊水の写真 ]</div>
+                    <h3>豊水</h3>
+                    <span class="product-season">Season: 8.late - 9.mid</span>
+                    <p class="product-desc">甘みと程よい酸味が含まれていて非常に濃厚。果汁たっぷりで深いコクがあります。</p>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img">[ 秋月の写真 ]</div>
+                    <h3>秋月</h3>
+                    <span class="product-season">Season: 9.mid - 10.early</span>
+                    <p class="product-desc">ずっしりと大きなサイズ。酸味が少なく上品な甘さと、心地よい食感がギフトにも最適。</p>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img">[ かおりの写真 ]</div>
+                    <h3>かおり</h3>
+                    <span class="product-season">Season: 9.mid - 10.early</span>
+                    <p class="product-desc">ずっしりと大きなサイズ。酸味が少なく上品な甘さと、心地よい食感がギフトにも最適。</p>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img">[ 新高の写真 ]</div>
+                    <h3>新高</h3>
+                    <span class="product-season">Season: 9.mid - 10.early</span>
+                    <p class="product-desc">ずっしりと大きなサイズ。酸味が少なく上品な甘さと、心地よい食感がギフトにも最適。</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="access">
+        <div class="container">
+            <div class="section-title">
+                <span class="en">Visit Us</span>
+                <span class="jp">直売所のご案内</span>
+            </div>
+            <div class="info-layout">
+
+                <table class="info-table">
+                    <tr>
+                        <th>営業時間</th>
+                        <td>9:00 〜 17:00</td>
+                    </tr>
+                    <tr>
+                        <th>営業期間</th>
+                        <td>7月上旬 〜 10月上旬</td>
+                    </tr>
+                    <tr>
+                        <th>住所</th>
+                        <td>〒270-2222<br>千葉県県松戸市高塚新田330</td>
+                    </tr>
+
+                    <tr>
+                        <th>TEL</th>
+                        <td> 047-391-5301 </td>
+                    </tr>
+                    <tr>
+                        <th>駐車場</th>
+                        <td>あり（軽・普通車あわせて4台）</td>
+                    </tr>
+                    <tr>
+                        <th>お支払い</th>
+                        <td>現金のみ</td>
+                    </tr>
+                </table>
+
+                <div class="info-map">
+                    <div style="padding: 0; text-align: center;">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5444.716923532029!2d139.9421545095567!3d35.76436880018948!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x601883f90ded54e3%3A0xfb0e053c915b6f9c!2z6auY5b-g5ZyS!5e0!3m2!1sja!2sjp!4v1782317319127!5m2!1sja!2sjp"
+                            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="strict-origin-when-cross-origin">
+                        </iframe>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 高忠園. New standards for Japanese Pears.</p>
+        </div>
+    </footer>
+
+    <script>
+        const slides = document.querySelectorAll('.slide-bg');
+        let currentIndex = 0;
+
+        function showNextSlide() {
+            // 現在表示されているスライドから「is-active」を消す
+            slides[currentIndex].classList.remove('is-active');
+
+            // 次の画像の番号に進む（最後の次は0に戻る）
+            currentIndex = (currentIndex + 1) % slides.length;
+
+            // 次のスライドに「is-active」をつけて表示させる
+            slides[currentIndex].classList.add('is-active');
+        }
+
+        // 4秒（4000ミリ秒）ごとに自動実行
+        setInterval(showNextSlide, 4000);
+    </script>
+
+</body>
+
+</html>
